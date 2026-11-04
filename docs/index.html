@@ -10,9 +10,8 @@
 @media (prefers-color-scheme:dark){:root{--bg:#141816;--kaart:#1d2320;--tekst:#eef1ef;--zacht:#a3aea8;--lijn:#333b37;--accent:#69cda8;--accent-zacht:#1c3a30;--deal:#f5a673;--deal-zacht:#46291a;--focus:#69cda8}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tekst);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:1080px;margin:auto;padding:24px 16px 56px}
+main{max-width:1120px;margin:auto;padding:24px 16px 56px}
 h1{font-size:1.9rem;margin:0;letter-spacing:-.02em}
-h2{font-size:1.1rem;margin:32px 0 10px}
 .sub{color:var(--zacht);margin:4px 0 20px;font-size:.92rem}
 .waarschuwing{background:var(--deal-zacht);color:var(--deal);padding:10px 14px;border-radius:8px;margin-bottom:16px}
 .tegels{display:grid;gap:12px;grid-template-columns:repeat(4,1fr)}
@@ -20,45 +19,60 @@ h2{font-size:1.1rem;margin:32px 0 10px}
 .tegel:hover{border-color:var(--accent)}
 .tegel.hoofd{background:var(--accent-zacht);border-color:var(--accent)}
 .tegel small{color:var(--zacht);font-size:.8rem}
-.tegel b{font-size:1.5rem;letter-spacing:-.01em}
+.tegel b{font-size:1.5rem;letter-spacing:-.01em;line-height:1.2}
+.tegel b i{font-style:normal;font-size:.8rem;font-weight:500;letter-spacing:0;color:var(--zacht)}
 .tegel span{font-size:.92rem;overflow-wrap:anywhere}
-.filters{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0 12px;align-items:center}
-input[type=search]{flex:1 1 220px;font:inherit;padding:9px 12px;border:1px solid var(--lijn);border-radius:8px;background:var(--kaart);color:inherit;min-width:0}
+.zoek{margin:24px 0 12px}
+input[type=search]{width:100%;font:inherit;padding:9px 12px;border:1px solid var(--lijn);border-radius:8px;background:var(--kaart);color:inherit}
+.regel{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:10px}
+.titel{font-size:.82rem;font-weight:600;color:var(--zacht);min-width:76px}
 .groep{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font:inherit;font-size:.86rem;padding:6px 11px;min-height:34px;border:1px solid var(--lijn);border-radius:999px;background:var(--kaart);color:inherit;cursor:pointer}
 .chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:600}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+details.meer{margin-bottom:12px}
+details.meer>summary{cursor:pointer;font-size:.88rem;font-weight:600;padding:4px 0}
+details.meer[open]>summary{margin-bottom:10px}
+.wis{all:unset;cursor:pointer;font-size:.84rem;color:var(--accent);text-decoration:underline}
+.wis:focus-visible{outline:2px solid var(--focus)}
 .tel{color:var(--zacht);font-size:.86rem;margin:0 0 8px}
 .lijst{background:var(--kaart);border:1px solid var(--lijn);border-radius:10px;overflow:hidden}
 table{border-collapse:collapse;width:100%;font-size:.92rem}
-th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--lijn);vertical-align:top}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--lijn);vertical-align:top;font-variant-numeric:tabular-nums}
 tr:last-child td{border-bottom:0}
 th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}
-th{white-space:nowrap}th button{all:unset;cursor:pointer;font-weight:600;font-size:.82rem;color:var(--zacht)}
+th{vertical-align:bottom;line-height:1.2}
+th button{all:unset;cursor:pointer;font-weight:600;font-size:.82rem;color:var(--zacht)}
 th button:focus-visible{outline:2px solid var(--focus)}
-th[aria-sort=ascending] button,th[aria-sort=descending] button{color:var(--accent)}
+th.actief,td.actief{background:var(--accent-zacht)}
+th.actief button{color:var(--accent)}
+td.actief{font-weight:700;color:var(--accent)}
 td a{color:inherit;text-decoration:none}
 td a:hover{text-decoration:underline}
-.kern{font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
-td{font-variant-numeric:tabular-nums}
-.label{display:inline-block;font-size:.74rem;padding:1px 7px;border-radius:999px;background:var(--deal-zacht);color:var(--deal);font-weight:600;margin-left:6px;white-space:nowrap}
-.bij{color:var(--zacht);font-size:.8rem}
+.label{display:inline-block;font-size:.74rem;padding:1px 7px;border-radius:999px;background:var(--deal-zacht);color:var(--deal);font-weight:600;white-space:nowrap}
+td .label{margin-left:6px}
+.bij{display:block;color:var(--zacht);font-size:.8rem}
 .mobiel{display:none}
-details{margin-top:28px;background:var(--kaart);border:1px solid var(--lijn);border-radius:10px;padding:12px 14px}
-summary{cursor:pointer;font-weight:600}
-details ul{margin:10px 0 0;padding:0;list-style:none;font-size:.88rem}
-details li{padding:5px 0;border-bottom:1px solid var(--lijn);overflow-wrap:anywhere}
+#onbekend{margin-top:28px;background:var(--kaart);border:1px solid var(--lijn);border-radius:10px;padding:12px 14px}
+#onbekend summary{cursor:pointer;font-weight:600}
+#onbekend ul{margin:10px 0 0;padding:0;list-style:none;font-size:.88rem}
+#onbekend li{padding:5px 0;border-bottom:1px solid var(--lijn);overflow-wrap:anywhere}
 .uitleg{color:var(--zacht);font-size:.86rem;margin-top:24px}
 .uitleg a{color:inherit}
 .leeg{padding:28px;text-align:center;color:var(--zacht)}
-@media (max-width:760px){
+@media (max-width:820px){
  .tegels{grid-template-columns:1fr 1fr}.tegel.hoofd,.tegel:last-child{grid-column:1/-1}
- table,thead{display:none}.mobiel{display:block}
+ .titel{min-width:100%}
+ table{display:none}.mobiel{display:block}
  .rij{display:block;padding:12px 14px;border-bottom:1px solid var(--lijn);color:inherit;text-decoration:none}
  .rij:last-child{border-bottom:0}
- .rij .boven{display:flex;justify-content:space-between;gap:12px}
- .rij .kern{white-space:nowrap}
- .rij .bij{display:block;margin-top:2px}
+ .rij .label{margin-top:4px}
+ .cijfers{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+ .cijfer{background:var(--bg);border-radius:6px;padding:5px 7px;display:flex;flex-direction:column;font-variant-numeric:tabular-nums}
+ .cijfer small{font-size:.72rem;color:var(--zacht);white-space:nowrap}
+ .cijfer b{font-size:.98rem}
+ .cijfer.actief{background:var(--accent-zacht)}
+ .cijfer.actief b,.cijfer.actief small{color:var(--accent)}
 }
 </style>
 </head>
@@ -68,20 +82,23 @@ details li{padding:5px 0;border-bottom:1px solid var(--lijn);overflow-wrap:anywh
 <p class="sub" id="stand">Prijzen laden…</p>
 <div id="oud"></div>
 <section class="tegels" id="tegels" aria-label="Beste deals"></section>
-<section aria-label="Filters" class="filters">
- <input type="search" id="zoek" placeholder="Zoek product" aria-label="Zoek product">
- <div class="groep" id="soorten"></div>
- <div class="groep" id="smaken"></div>
- <div class="groep" id="extra"></div>
-</section>
-<div class="groep" id="winkels" style="margin-bottom:14px"></div>
+<div class="zoek"><input type="search" id="zoek" placeholder="Zoek product" aria-label="Zoek product"></div>
+<div class="regel"><span class="titel">Sorteer op</span><div class="groep" id="sorteer"></div></div>
+<div class="regel"><span class="titel">Soort</span><div class="groep" id="soorten"></div></div>
+<details class="meer" id="meer"><summary id="meerTitel"></summary>
+ <div class="regel"><span class="titel">Winkels</span><div class="groep" id="winkels"></div></div>
+ <div class="regel"><span class="titel">Smaak</span><div class="groep" id="smaken"></div></div>
+ <div class="regel"><span class="titel">Formaat</span><div class="groep" id="formaten"></div></div>
+ <div class="regel"><span class="titel">Toon</span><div class="groep" id="extra"></div></div>
+ <button class="wis" type="button" id="wis">Filters wissen</button>
+</details>
 <p class="tel" id="tel"></p>
 <div class="lijst">
  <table><thead><tr id="kop"></tr></thead><tbody id="tabel"></tbody></table>
  <div class="mobiel" id="kaarten"></div>
 </div>
 <details id="onbekend"><summary></summary><p class="bij">Deze producten doen nog niet mee aan de ranglijst, omdat er geen betrouwbare eiwitwaarde of gewicht is. Vul ze aan in <code>data/eiwit.json</code>.</p><ul></ul></details>
-<p class="uitleg">Rangschikking op prijs per 100 g eiwit. "≈" betekent dat de eiwitwaarde van een andere smaak in dezelfde productlijn komt. "Lager dan normaal" vergelijkt met de eigen prijs van de afgelopen 30 dagen, "onder gangbaar" met dezelfde productlijn bij andere winkels. Prijzen via <a href="https://github.com/supermarkt/checkjebon">Checkjebon</a>; ze kunnen per filiaal verschillen en Aldi ontbreekt in de bron. Controleer de prijs in de winkel of app.</p>
+<p class="uitleg"><strong>Per stuk</strong> is wat je aan de kassa betaalt voor één verpakking. <strong>Per kg</strong> vergelijkt verpakkingen van verschillende grootte. <strong>Per 100 g eiwit</strong> is wat 100 gram eiwit uit dit product kost, en dat is de eerlijkste vergelijking tussen producten met veel en weinig eiwit. "≈" betekent dat de eiwitwaarde van een andere smaak in dezelfde productlijn komt. "Lager dan normaal" vergelijkt met de eigen prijs van de afgelopen 30 dagen, "onder gangbaar" met dezelfde productlijn bij andere winkels. Prijzen via <a href="https://github.com/supermarkt/checkjebon">Checkjebon</a>; ze kunnen per filiaal verschillen en Aldi ontbreekt in de bron. Controleer de prijs in de winkel of app.</p>
 </main>
 <script>
 const eur=n=>'€'+n.toFixed(2).replace('.',',');
@@ -90,30 +107,50 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const maat=g=>g>=1000?nl(g/1000)+' kg':g+' g';
 const SOORT={alle:'Alles',kwark:'Kwark',skyr:'Skyr',griekse:'Griekse stijl',protein:'High protein',pudding:'Pudding'};
 const SMAAK={alle:'Alle smaken',naturel:'Naturel',smaak:'Met smaak'};
-const KOL=[['naam','Product'],['winkel','Winkel'],['gram','Inhoud'],['prijs','Prijs'],['perKg','€/kg'],['eiwit','Eiwit/100 g'],['perEiwit','€/100 g eiwit']];
-const st={zoek:'',soort:'alle',smaak:'alle',winkels:new Set(),exact:false,deal:false,sort:'perEiwit',op:1};
+const FORMAAT={alle:'Alle formaten',klein:'Tot 250 g',middel:'250-999 g',groot:'1 kg of meer'};
+const SORT={perEiwit:['Prijs per 100 g eiwit',1],perKg:['Prijs per kg',1],prijs:['Prijs per stuk',1],eiwit:['Meeste eiwit per 100 g',-1]};
+const KOL=[['naam','Product'],['winkel','Winkel'],['gram','Inhoud'],['eiwit','Eiwit<br>per 100 g'],['prijs','Prijs<br>per stuk'],['perKg','Prijs<br>per kg'],['perEiwit','Prijs per<br>100 g eiwit']];
+const SMAAKWOORD=/aardb|vanil|framboos|perzik|mango|bosbes|bosvrucht|bosfruit|blueberry|blauwe bes|kers|cherry|citroen|stracc|straci|kokos|coconut|banaan|banana|caramel|karamel|sinaas|appel|passie|passion|papaja|rood fruit|honing|toffee|peach|strawberry|chocola|speculaas|kaneel|pie|limited|raspberry|lemon|mandarin|matcha|assorti|panna|lactose/g;
+const BEGIN={zoek:'',soort:'alle',smaak:'alle',formaat:'alle',winkels:[],exact:false,deal:false,mager:false,alles:false,sort:'perEiwit',op:1};
+const st={...BEGIN,...lees()};st.winkels=new Set(st.winkels);st.zoek='';
 let D=null;
+function lees(){try{return JSON.parse(localStorage.getItem('proteindex'))||{}}catch{return{}}}
+function bewaar(){try{localStorage.setItem('proteindex',JSON.stringify({...st,zoek:'',winkels:[...st.winkels]}))}catch{}}
 function chip(el,t,aan,fn){const b=document.createElement('button');b.className='chip';b.type='button';b.textContent=t;b.setAttribute('aria-pressed',aan);b.onclick=fn;el.append(b)}
-function label(p){if(!p.deal)return'';const t=p.deal.soort==='normaal'?`${p.deal.pct}% lager dan normaal`:`${p.deal.pct}% onder gangbaar`;return`<span class="label" title="Referentie ${eur(p.deal.normaal)}">${t}</span>`}
+function label(p){if(!p.deal)return'';const t=p.deal.soort==='normaal'?`${p.deal.pct}% lager dan normaal`:`${p.deal.pct}% onder gangbaar`;return`<span class="label" title="Referentieprijs ${eur(p.deal.normaal)}">${t}</span>`}
 function eiwit(p){return(p.exact?'':'≈ ')+nl(p.eiwit)+' g'}
-function gefilterd(){const q=st.zoek.toLowerCase();return D.producten.filter(p=>(st.soort==='alle'||p.soort===st.soort)&&(st.smaak==='alle'||p.smaak===st.smaak)&&(!st.winkels.size||st.winkels.has(p.winkel))&&(!st.exact||p.exact)&&(!st.deal||p.deal)&&(!q||(p.naam+' '+p.winkel).toLowerCase().includes(q)))}
+function past(p){return p.gram<250?'klein':p.gram<1000?'middel':'groot'}
+function gefilterd(){const q=st.zoek.toLowerCase();return D.producten.filter(p=>(st.soort==='alle'||p.soort===st.soort)&&(st.smaak==='alle'||p.smaak===st.smaak)&&(st.formaat==='alle'||past(p)===st.formaat)&&(!st.winkels.size||st.winkels.has(p.winkel))&&(!st.exact||p.exact)&&(!st.deal||p.deal)&&(!st.mager||p.vet<=1)&&(!q||(p.naam+' '+p.winkel).toLowerCase().includes(q)))}
+function sleutel(p){const smaken=[...new Set(p.naam.toLowerCase().match(SMAAKWOORD)||[])].sort();return[p.bron,p.gram,...smaken].join('|')}
+function samenvoegen(l){const m=new Map();for(const p of l){const k=sleutel(p);if(!m.has(k))m.set(k,[]);m.get(k).push(p)}
+return[...m.values()].map(g=>{g.sort((a,b)=>a.prijs-b.prijs||(b.deal?1:0)-(a.deal?1:0));const[b]=g;return{...b,ook:[...new Set(g.slice(1).filter(p=>p.prijs===b.prijs&&p.winkel!==b.winkel).map(p=>p.winkel))],duurder:new Set(g.filter(p=>p.prijs>b.prijs).map(p=>p.winkel)).size}})}
+function nadien(p){const d=[];if(p.ook&&p.ook.length)d.push(`Zelfde prijs bij ${p.ook.map(esc).join(', ')}`);if(p.duurder)d.push(`${p.duurder} ${p.duurder===1?'winkel':'winkels'} duurder`);return d.length?`<span class="bij">${d.join(' · ')}</span>`:''}
 function beste(l,f){return l.filter(f).sort((a,b)=>a.perEiwit-b.perEiwit)[0]}
-function tegel(t,p,hoofd){if(!p)return'';return`<a class="tegel${hoofd?' hoofd':''}" href="${esc(p.url)}" rel="noopener"><small>${t}</small><b>${eur(p.perEiwit)}</b><span>${esc(p.naam)}</span><small>${esc(p.winkel)} · ${eur(p.prijs)} · ${maat(p.gram)} · ${eiwit(p)} eiwit</small></a>`}
-function tegels(){const l=D.producten;const max=Math.max(...l.map(p=>p.eiwit));document.getElementById('tegels').innerHTML=tegel('Goedkoopste eiwit nu, per 100 g',beste(l,()=>1),1)+tegel('Beste skyr',beste(l,p=>p.soort==='skyr'))+tegel('Beste met smaak',beste(l,p=>p.smaak==='smaak'))+tegel(`Meeste eiwit (${nl(max)} g per 100 g)`,beste(l,p=>p.eiwit===max))}
-function filters(){const s=document.getElementById('soorten');s.replaceChildren();for(const k in SOORT)chip(s,SOORT[k],st.soort===k,()=>{st.soort=k;teken()});
-const m=document.getElementById('smaken');m.replaceChildren();for(const k in SMAAK)chip(m,SMAAK[k],st.smaak===k,()=>{st.smaak=k;teken()});
-const e=document.getElementById('extra');e.replaceChildren();chip(e,'Alleen acties',st.deal,()=>{st.deal=!st.deal;teken()});chip(e,'Alleen exacte eiwitwaarde',st.exact,()=>{st.exact=!st.exact;teken()});
-const w=document.getElementById('winkels');w.replaceChildren();[...new Set(D.producten.map(p=>p.winkel))].sort().forEach(n=>chip(w,n,st.winkels.has(n),()=>{st.winkels.has(n)?st.winkels.delete(n):st.winkels.add(n);teken()}))}
-function kop(){document.getElementById('kop').innerHTML=KOL.map(([k,t])=>`<th scope="col" ${st.sort===k?`aria-sort="${st.op>0?'ascending':'descending'}"`:''}><button data-k="${k}">${t}${st.sort===k?(st.op>0?' ↑':' ↓'):''}</button></th>`).join('');document.querySelectorAll('#kop button').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(st.sort===k)st.op=-st.op;else{st.sort=k;st.op=k==='eiwit'?-1:1}teken()})}
-function teken(){filters();kop();const l=gefilterd().sort((a,b)=>{const x=a[st.sort],y=b[st.sort];return(typeof x==='string'?x.localeCompare(y,'nl'):x-y)*st.op||a.perEiwit-b.perEiwit});
-document.getElementById('tel').textContent=`${l.length} van ${D.producten.length} producten`;
-document.getElementById('tabel').innerHTML=l.length?l.map(p=>`<tr><td><a href="${esc(p.url)}" rel="noopener">${esc(p.naam)}</a>${label(p)}</td><td>${esc(p.winkel)}</td><td>${maat(p.gram)}</td><td>${eur(p.prijs)}</td><td>${eur(p.perKg)}</td><td><a href="${esc(p.bron)}" rel="noopener" title="Bron van de eiwitwaarde${p.community?' (community-data)':''}">${eiwit(p)}</a></td><td class="kern">${eur(p.perEiwit)}</td></tr>`).join(''):'<tr><td colspan="7" class="leeg">Geen producten met deze filters</td></tr>';
-document.getElementById('kaarten').innerHTML=l.length?l.map(p=>`<a class="rij" href="${esc(p.url)}" rel="noopener"><span class="boven"><span>${esc(p.naam)}</span><span class="kern">${eur(p.perEiwit)}</span></span><span class="bij">${esc(p.winkel)} · ${eur(p.prijs)} · ${maat(p.gram)} · ${eur(p.perKg)}/kg · ${eiwit(p)} eiwit</span>${label(p).replace('margin-left','')}</a>`).join(''):'<div class="leeg">Geen producten met deze filters</div>'}
+function tegel(t,p,hoofd){if(!p)return'';return`<a class="tegel${hoofd?' hoofd':''}" href="${esc(p.url)}" rel="noopener"><small>${t}</small><b>${eur(p.perEiwit)} <i>per 100 g eiwit</i></b><span>${esc(p.naam)}</span><small>${esc(p.winkel)} · ${maat(p.gram)} · ${eiwit(p)} eiwit per 100 g</small><small>${eur(p.prijs)} per stuk · ${eur(p.perKg)} per kg</small></a>`}
+function tegels(){const l=D.producten;const max=Math.max(...l.map(p=>p.eiwit));document.getElementById('tegels').innerHTML=tegel('Goedkoopste eiwit nu',beste(l,()=>1),1)+tegel('Beste skyr',beste(l,p=>p.soort==='skyr'))+tegel('Beste met smaak',beste(l,p=>p.smaak==='smaak'))+tegel(`Meeste eiwit (${nl(max)} g per 100 g)`,beste(l,p=>p.eiwit===max))}
+function zet(k,v){st[k]=v;teken()}
+function aantalFilters(){return st.winkels.size+['smaak','formaat'].filter(k=>st[k]!=='alle').length+['exact','deal','mager','alles'].filter(k=>st[k]).length}
+function filters(){const leeg=id=>{const e=document.getElementById(id);e.replaceChildren();return e};
+const o=leeg('sorteer');for(const k in SORT)chip(o,SORT[k][0],st.sort===k,()=>{st.sort=k;st.op=SORT[k][1];teken()});
+const s=leeg('soorten');for(const k in SOORT)chip(s,SOORT[k],st.soort===k,()=>zet('soort',k));
+const m=leeg('smaken');for(const k in SMAAK)chip(m,SMAAK[k],st.smaak===k,()=>zet('smaak',k));
+const f=leeg('formaten');for(const k in FORMAAT)chip(f,FORMAAT[k],st.formaat===k,()=>zet('formaat',k));
+const e=leeg('extra');chip(e,'Alleen acties',st.deal,()=>zet('deal',!st.deal));chip(e,'Alleen mager (max. 1 g vet)',st.mager,()=>zet('mager',!st.mager));chip(e,'Alleen exacte eiwitwaarde',st.exact,()=>zet('exact',!st.exact));chip(e,'Elke winkel apart',st.alles,()=>zet('alles',!st.alles));
+const w=leeg('winkels');[...new Set(D.producten.map(p=>p.winkel))].sort().forEach(n=>chip(w,n,st.winkels.has(n),()=>{st.winkels.has(n)?st.winkels.delete(n):st.winkels.add(n);teken()}));
+const n=aantalFilters();document.getElementById('meerTitel').textContent=n?`Meer filters (${n} actief)`:'Meer filters: winkels, smaak, formaat';document.getElementById('wis').hidden=!n}
+function kop(){document.getElementById('kop').innerHTML=KOL.map(([k,t])=>`<th scope="col" class="${st.sort===k?'actief':''}" ${st.sort===k?`aria-sort="${st.op>0?'ascending':'descending'}"`:''}><button data-k="${k}">${t}${st.sort===k?(st.op>0?' ↑':' ↓'):''}</button></th>`).join('');document.querySelectorAll('#kop button').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(st.sort===k)st.op=-st.op;else{st.sort=k;st.op=SORT[k]?SORT[k][1]:1}teken()})}
+function cel(p,k,v){return`<td class="${st.sort===k?'actief':''}">${v}</td>`}
+function cijfer(p,k,t,v){return`<span class="cijfer${st.sort===k?' actief':''}"><small>${t}</small><b>${v}</b></span>`}
+function teken(){bewaar();filters();kop();const f=gefilterd(),z=st.alles?f:samenvoegen(f);const l=z.sort((a,b)=>{const x=a[st.sort],y=b[st.sort];return(typeof x==='string'?x.localeCompare(y,'nl'):x-y)*st.op||a.perEiwit-b.perEiwit});
+document.getElementById('tel').textContent=st.alles?`${l.length} producten per winkel`:`${l.length} producten, gesorteerd op ${(SORT[st.sort]||[KOL.find(k=>k[0]===st.sort)[1].replace('<br>',' ')])[0].toLowerCase()}`;
+document.getElementById('tabel').innerHTML=l.length?l.map(p=>`<tr><td><a href="${esc(p.url)}" rel="noopener">${esc(p.naam)}</a>${label(p)}${nadien(p)}</td>${cel(p,'winkel',esc(p.winkel))}${cel(p,'gram',maat(p.gram))}<td class="${st.sort==='eiwit'?'actief':''}"><a href="${esc(p.bron)}" rel="noopener" title="Bron van de eiwitwaarde${p.community?' (community-data)':''}">${eiwit(p)}</a></td>${cel(p,'prijs',eur(p.prijs))}${cel(p,'perKg',eur(p.perKg))}${cel(p,'perEiwit',eur(p.perEiwit))}</tr>`).join(''):'<tr><td colspan="7" class="leeg">Geen producten met deze filters</td></tr>';
+document.getElementById('kaarten').innerHTML=l.length?l.map(p=>`<a class="rij" href="${esc(p.url)}" rel="noopener"><span>${esc(p.naam)}</span><span class="bij">${esc(p.winkel)} · ${maat(p.gram)} · ${eiwit(p)} eiwit per 100 g</span>${nadien(p)}${label(p)}<span class="cijfers">${cijfer(p,'prijs','Per stuk',eur(p.prijs))}${cijfer(p,'perKg','Per kg',eur(p.perKg))}${cijfer(p,'perEiwit','Per 100 g eiwit',eur(p.perEiwit))}</span></a>`).join(''):'<div class="leeg">Geen producten met deze filters</div>'}
+document.getElementById('wis').onclick=()=>{Object.assign(st,{smaak:'alle',formaat:'alle',exact:false,deal:false,mager:false,alles:false});st.winkels.clear();teken()};
 fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{D=d;const b=new Date(d.bijgewerkt),f={dateStyle:'long'};const bron=d.brondatum?new Date(d.brondatum):null;
 document.getElementById('stand').textContent=`Bijgewerkt ${b.toLocaleDateString('nl-NL',f)}`+(bron?` · prijzen van ${bron.toLocaleDateString('nl-NL',f)}`:'');
 const leeftijd=(Date.now()-(bron||b))/864e5;if(leeftijd>4)document.getElementById('oud').innerHTML=`<p class="waarschuwing">Deze prijzen zijn ${Math.floor(leeftijd)} dagen oud, dus deals kunnen verlopen zijn.</p>`;
 tegels();const o=document.getElementById('onbekend');o.querySelector('summary').textContent=`Nog ${d.onbekend.length} producten zonder eiwitwaarde`;o.querySelector('ul').innerHTML=d.onbekend.map(p=>`<li><a href="${esc(p.url)}" rel="noopener">${esc(p.naam)}</a> · ${esc(p.winkel)}${p.maat?' · '+esc(p.maat):''}${p.prijs?' · '+eur(p.prijs):''}</li>`).join('');
-document.getElementById('zoek').oninput=e=>{st.zoek=e.target.value;teken()};teken()}).catch(()=>{document.getElementById('stand').textContent='De prijzen konden niet worden geladen. Probeer het later opnieuw.'});
+document.getElementById('zoek').oninput=e=>{st.zoek=e.target.value;teken()};teken()}).catch(e=>{console.error(e);document.getElementById('stand').textContent='De prijzen konden niet worden geladen. Probeer het later opnieuw.'});
 </script>
 </body>
 </html>
