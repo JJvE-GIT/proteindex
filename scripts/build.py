@@ -35,7 +35,7 @@ UIT = re.compile(
     re.I,
 )
 SMAAK = re.compile(
-    r"aardb|vanil|framboos|perzik|mango|bosbes|bosvrucht|bosfruit|blueberry|blauwe bes|kers|citroen|stracc|straci|"
+    r"aardb|vanil|framboos|perzik|mango|bosbes|bosvrucht|bosfruit|blueberry|blauwe bes|kers|citroen|stracc|straci|strac\.|sinaas\.|"
     r"kokos|coconut|banaan|banana|caramel|karamel|sinaas|appel|passie|passion|papaja|rood fruit|honing|toffee|peach|"
     r"strawberry|vrucht|choco|speculaas|kaneel|\bpie\b|limited|raspberry|lemon|mandarin|matcha|assorti|panna",
     re.I,
@@ -107,6 +107,9 @@ def bouw(data, regels, historie, vandaag, brondatum):
             prijs = p.get("p")
             url = winkel["u"] + p["l"]
             regel = vind_regel(regels, code, naam)
+            if not gewicht and regel and "stukGram" in regel:
+                aantal = re.search(r"(\d+)\s*(st\b|stuks|-pack|-pak)", f"{p.get('s', '')} {naam}", re.I)
+                gewicht = regel["stukGram"] * (int(aantal[1]) if aantal else 1)
             bruikbaar = (
                 gewicht and prijs and gewicht >= 80 and 1 <= prijs / gewicht * 1000 <= 30
             )
