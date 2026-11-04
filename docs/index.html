@@ -97,7 +97,7 @@ td .label{margin-left:6px}
  <table><thead><tr id="kop"></tr></thead><tbody id="tabel"></tbody></table>
  <div class="mobiel" id="kaarten"></div>
 </div>
-<details id="onbekend"><summary></summary><p class="bij">Deze producten doen nog niet mee aan de ranglijst, omdat er geen betrouwbare eiwitwaarde of gewicht is. Vul ze aan in <code>data/eiwit.json</code>.</p><ul></ul></details>
+<details id="onbekend"><summary></summary><p class="bij">Deze producten doen nog niet mee aan de ranglijst. Vaak toont de winkelsite de voedingswaarden niet leesbaar, is de productnaam te vaag om te herkennen, of geeft de prijsbron geen gewicht. Staat er een product tussen dat je mist, dan kan de waarde worden toegevoegd in <code>data/eiwit.json</code>.</p><ul></ul></details>
 <p class="uitleg"><strong>Per stuk</strong> is wat je aan de kassa betaalt voor één verpakking. <strong>Per kg</strong> vergelijkt verpakkingen van verschillende grootte. <strong>Per 100 g eiwit</strong> is wat 100 gram eiwit uit dit product kost, en dat is de eerlijkste vergelijking tussen producten met veel en weinig eiwit. "≈" betekent dat de eiwitwaarde van een andere smaak in dezelfde productlijn komt. "Lager dan normaal" vergelijkt met de eigen prijs van de afgelopen 30 dagen, "onder gangbaar" met dezelfde productlijn bij andere winkels. Prijzen via <a href="https://github.com/supermarkt/checkjebon">Checkjebon</a>; ze kunnen per filiaal verschillen en Aldi ontbreekt in de bron. Controleer de prijs in de winkel of app.</p>
 </main>
 <script>
@@ -149,7 +149,7 @@ document.getElementById('wis').onclick=()=>{Object.assign(st,{smaak:'alle',forma
 fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{D=d;const b=new Date(d.bijgewerkt),f={dateStyle:'long'};const bron=d.brondatum?new Date(d.brondatum):null;
 document.getElementById('stand').textContent=`Bijgewerkt ${b.toLocaleDateString('nl-NL',f)}`+(bron?` · prijzen van ${bron.toLocaleDateString('nl-NL',f)}`:'');
 const leeftijd=(Date.now()-(bron||b))/864e5;if(leeftijd>4)document.getElementById('oud').innerHTML=`<p class="waarschuwing">Deze prijzen zijn ${Math.floor(leeftijd)} dagen oud, dus deals kunnen verlopen zijn.</p>`;
-tegels();const o=document.getElementById('onbekend');o.querySelector('summary').textContent=`Nog ${d.onbekend.length} producten zonder eiwitwaarde`;o.querySelector('ul').innerHTML=d.onbekend.map(p=>`<li><a href="${esc(p.url)}" rel="noopener">${esc(p.naam)}</a> · ${esc(p.winkel)}${p.maat?' · '+esc(p.maat):''}${p.prijs?' · '+eur(p.prijs):''}</li>`).join('');
+tegels();const o=document.getElementById('onbekend');o.querySelector('summary').textContent=`${d.onbekend.length} producten nog niet in de ranglijst`;o.querySelector('ul').innerHTML=d.onbekend.map(p=>`<li><a href="${esc(p.url)}" rel="noopener">${esc(p.naam)}</a> · ${esc(p.winkel)}${p.maat?' · '+esc(p.maat):''}${p.prijs?' · '+eur(p.prijs):''}</li>`).join('');
 document.getElementById('zoek').oninput=e=>{st.zoek=e.target.value;teken()};teken()}).catch(e=>{console.error(e);document.getElementById('stand').textContent='De prijzen konden niet worden geladen. Probeer het later opnieuw.'});
 </script>
 </body>
