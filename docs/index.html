@@ -15,6 +15,9 @@ h1{font-size:1.9rem;margin:0;letter-spacing:-.02em}
 .sub{color:var(--zacht);margin:4px 0 20px;font-size:.92rem}
 .waarschuwing{background:var(--deal-zacht);color:var(--deal);padding:10px 14px;border-radius:8px;margin-bottom:16px}
 .tegels{display:grid;gap:12px;grid-template-columns:repeat(4,1fr)}
+.bronnen{color:var(--zacht);font-size:.84rem;margin:-14px 0 20px}.bronnen a{color:inherit}
+.label.actie{background:var(--accent-zacht);color:var(--accent)}
+#binnenkort{margin-top:24px}#binnenkort h2{font-size:1.05rem;margin:0 0 8px}#binnenkort ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}#binnenkort li a{display:block;background:var(--kaart);border:1px solid var(--lijn);border-radius:10px;padding:10px 12px;color:inherit;text-decoration:none;font-size:.9rem}#binnenkort li a:hover{border-color:var(--accent)}#binnenkort b{color:var(--accent)}
 .tegel{display:flex;flex-direction:column;gap:2px;background:var(--kaart);border:1px solid var(--lijn);border-radius:10px;padding:14px;color:inherit;text-decoration:none;min-width:0}
 .tegel:hover{border-color:var(--accent)}
 .tegel.hoofd{background:var(--accent-zacht);border-color:var(--accent)}
@@ -80,8 +83,10 @@ td .label{margin-left:6px}
 <main>
 <h1>Proteindex</h1>
 <p class="sub" id="stand">Prijzen laden…</p>
+<p class="bronnen">Gewone prijzen via <a href="https://github.com/supermarkt/checkjebon">Checkjebon</a> · Acties via <a href="https://www.prijsprofeet.nl">PrijsProfeet</a></p>
 <div id="oud"></div>
 <section class="tegels" id="tegels" aria-label="Beste deals"></section>
+<section id="binnenkort" hidden><h2>Binnenkort in de aanbieding</h2><ul></ul></section>
 <div class="zoek"><input type="search" id="zoek" placeholder="Zoek product" aria-label="Zoek product"></div>
 <div class="regel"><span class="titel">Sorteer op</span><div class="groep" id="sorteer"></div></div>
 <div class="regel"><span class="titel">Soort</span><div class="groep" id="soorten"></div></div>
@@ -98,7 +103,7 @@ td .label{margin-left:6px}
  <div class="mobiel" id="kaarten"></div>
 </div>
 <details id="onbekend"><summary></summary><p class="bij">Deze producten doen nog niet mee aan de ranglijst. Vaak toont de winkelsite de voedingswaarden niet leesbaar, is de productnaam te vaag om te herkennen, of geeft de prijsbron geen gewicht. Staat er een product tussen dat je mist, dan kan de waarde worden toegevoegd in <code>data/eiwit.json</code>.</p><ul></ul></details>
-<p class="uitleg"><strong>Per stuk</strong> is wat je aan de kassa betaalt voor één verpakking. <strong>Per kg</strong> vergelijkt verpakkingen van verschillende grootte. <strong>Per 100 g eiwit</strong> is wat 100 gram eiwit uit dit product kost, en dat is de eerlijkste vergelijking tussen producten met veel en weinig eiwit. "≈" betekent dat de eiwitwaarde van een andere smaak in dezelfde productlijn komt. "Lager dan normaal" vergelijkt met de eigen prijs van de afgelopen 30 dagen, "onder gangbaar" met dezelfde productlijn bij andere winkels. Prijzen via <a href="https://github.com/supermarkt/checkjebon">Checkjebon</a>; ze kunnen per filiaal verschillen en Aldi ontbreekt in de bron. Controleer de prijs in de winkel of app.</p>
+<p class="uitleg"><strong>Per stuk</strong> is wat je aan de kassa betaalt voor één verpakking. <strong>Per kg</strong> vergelijkt verpakkingen van verschillende grootte. <strong>Per 100 g eiwit</strong> is wat 100 gram eiwit uit dit product kost, en dat is de eerlijkste vergelijking tussen producten met veel en weinig eiwit. "≈" betekent dat de eiwitwaarde van een andere smaak in dezelfde productlijn komt. Groene labels zijn echte acties van de supermarkt, met de einddatum. Bij acties als "2 voor €3" rekenen we met de prijs per stuk als je het aantal koopt. Gewone prijzen via <a href="https://github.com/supermarkt/checkjebon">Checkjebon</a>, acties via <a href="https://www.prijsprofeet.nl">PrijsProfeet</a>. Prijzen zijn indicatief en kunnen per filiaal verschillen; Aldi staat er alleen met acties in. Controleer de prijs in de winkel of app.</p>
 </main>
 <script>
 const eur=n=>'€'+n.toFixed(2).replace('.',',');
@@ -117,14 +122,16 @@ let D=null;
 function lees(){try{return JSON.parse(localStorage.getItem('proteindex'))||{}}catch{return{}}}
 function bewaar(){try{localStorage.setItem('proteindex',JSON.stringify({...st,zoek:'',winkels:[...st.winkels]}))}catch{}}
 function chip(el,t,aan,fn){const b=document.createElement('button');b.className='chip';b.type='button';b.textContent=t;b.setAttribute('aria-pressed',aan);b.onclick=fn;el.append(b)}
-function label(p){if(!p.deal)return'';const t=p.deal.soort==='normaal'?`${p.deal.pct}% lager dan normaal`:`${p.deal.pct}% onder gangbaar`;return`<span class="label" title="Referentieprijs ${eur(p.deal.normaal)}">${t}</span>`}
+const DAG={weekday:'short',day:'numeric',month:'short'};
+const datum=d=>new Date(d+'T12:00:00').toLocaleDateString('nl-NL',DAG);
+function label(p){const d=p.deal;if(!d)return'';if(d.soort==='actie'){const t=esc(d.tekst)+(d.tot?` · t/m ${datum(d.tot)}${d.geschat?' (geschat)':''}`:'');return`<span class="label actie" title="${d.normaal?'Normaal '+eur(d.normaal):'Actie'}">${t}</span>`}const t=d.soort==='normaal'?`${d.pct}% lager dan normaal`:`${d.pct}% onder gangbaar`;return`<span class="label" title="Referentieprijs ${eur(d.normaal)}">${t}</span>`}
 function eiwit(p){return(p.exact?'':'≈ ')+nl(p.eiwit)+' g'}
 function past(p){return p.gram<250?'klein':p.gram<1000?'middel':'groot'}
 function gefilterd(){const q=st.zoek.toLowerCase();return D.producten.filter(p=>(st.soort==='alle'||p.soort===st.soort)&&(st.smaak==='alle'||p.smaak===st.smaak)&&(st.formaat==='alle'||past(p)===st.formaat)&&(!st.winkels.size||st.winkels.has(p.winkel))&&(!st.exact||p.exact)&&(!st.deal||p.deal)&&(!st.mager||p.vet<=1)&&(!q||(p.naam+' '+p.winkel).toLowerCase().includes(q)))}
 function sleutel(p){const smaken=[...new Set(p.naam.toLowerCase().match(SMAAKWOORD)||[])].sort();return[p.bron,p.gram,...smaken].join('|')}
 function samenvoegen(l){const m=new Map();for(const p of l){const k=sleutel(p);if(!m.has(k))m.set(k,[]);m.get(k).push(p)}
 return[...m.values()].map(g=>{g.sort((a,b)=>a.prijs-b.prijs||(b.deal?1:0)-(a.deal?1:0));const[b]=g;return{...b,ook:[...new Set(g.slice(1).filter(p=>p.prijs===b.prijs&&p.winkel!==b.winkel).map(p=>p.winkel))],duurder:new Set(g.filter(p=>p.prijs>b.prijs).map(p=>p.winkel)).size}})}
-function nadien(p){const d=[];if(p.ook&&p.ook.length)d.push(`Zelfde prijs bij ${p.ook.map(esc).join(', ')}`);if(p.duurder)d.push(`${p.duurder} ${p.duurder===1?'winkel':'winkels'} duurder`);return d.length?`<span class="bij">${d.join(' · ')}</span>`:''}
+function nadien(p){const d=[];if(p.deal&&p.deal.soort==='actie'){if(p.deal.normaal)d.push(`Normaal ${eur(p.deal.normaal)}`);if(p.deal.aantal)d.push(`prijs per stuk bij ${p.deal.aantal} stuks`)}if(p.ook&&p.ook.length)d.push(`Zelfde prijs bij ${p.ook.map(esc).join(', ')}`);if(p.duurder)d.push(`${p.duurder} ${p.duurder===1?'winkel':'winkels'} duurder`);return d.length?`<span class="bij">${d.join(' · ')}</span>`:''}
 function beste(l,f){return l.filter(f).sort((a,b)=>a.perEiwit-b.perEiwit)[0]}
 function tegel(t,p,hoofd){if(!p)return'';return`<a class="tegel${hoofd?' hoofd':''}" href="${esc(p.url)}" rel="noopener"><small>${t}</small><b>${eur(p.perEiwit)} <i>per 100 g eiwit</i></b><span>${esc(p.naam)}</span><small>${esc(p.winkel)} · ${maat(p.gram)} · ${eiwit(p)} eiwit per 100 g</small><small>${eur(p.prijs)} per stuk · ${eur(p.perKg)} per kg</small></a>`}
 function tegels(){const l=D.producten;const max=Math.max(...l.map(p=>p.eiwit));document.getElementById('tegels').innerHTML=tegel('Goedkoopste eiwit nu',beste(l,()=>1),1)+tegel('Beste skyr',beste(l,p=>p.soort==='skyr'))+tegel('Beste met smaak',beste(l,p=>p.smaak==='smaak'))+tegel(`Meeste eiwit (${nl(max)} g per 100 g)`,beste(l,p=>p.eiwit===max))}
@@ -149,7 +156,9 @@ document.getElementById('wis').onclick=()=>{Object.assign(st,{smaak:'alle',forma
 fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{D=d;const b=new Date(d.bijgewerkt),f={dateStyle:'long'};const bron=d.brondatum?new Date(d.brondatum):null;
 document.getElementById('stand').textContent=`Bijgewerkt ${b.toLocaleDateString('nl-NL',f)}`+(bron?` · prijzen van ${bron.toLocaleDateString('nl-NL',f)}`:'');
 const leeftijd=(Date.now()-(bron||b))/864e5;if(leeftijd>4)document.getElementById('oud').innerHTML=`<p class="waarschuwing">Deze prijzen zijn ${Math.floor(leeftijd)} dagen oud, dus deals kunnen verlopen zijn.</p>`;
-tegels();const o=document.getElementById('onbekend');o.querySelector('summary').textContent=`${d.onbekend.length} producten nog niet in de ranglijst`;o.querySelector('ul').innerHTML=d.onbekend.map(p=>`<li><a href="${esc(p.url)}" rel="noopener">${esc(p.naam)}</a> · ${esc(p.winkel)}${p.maat?' · '+esc(p.maat):''}${p.prijs?' · '+eur(p.prijs):''}</li>`).join('');
+tegels();const bk=d.binnenkort||[];if(bk.length){const s=document.getElementById('binnenkort');s.hidden=false;s.querySelector('ul').innerHTML=bk.slice(0,6).map(p=>`<li><a href="${esc(p.url||p.bron)}" rel="noopener"><b>${eur(p.perEiwit)}</b> per 100 g eiwit<span class="bij">${esc(p.naam)} · ${esc(p.winkel)}</span><span class="bij">${esc(p.deal.tekst)} · vanaf ${datum(p.deal.vanaf)}</span></a></li>`).join('')}
+if(d.acties&&!d.acties.ok)document.getElementById('oud').insertAdjacentHTML('beforeend','<p class="bij" style="margin:-8px 0 16px">De acties konden bij de laatste update niet worden opgehaald. De actielabels zijn daarom geschat uit prijsverschillen.</p>');
+const o=document.getElementById('onbekend');o.querySelector('summary').textContent=`${d.onbekend.length} producten nog niet in de ranglijst`;o.querySelector('ul').innerHTML=d.onbekend.map(p=>`<li><a href="${esc(p.url)}" rel="noopener">${esc(p.naam)}</a> · ${esc(p.winkel)}${p.maat?' · '+esc(p.maat):''}${p.prijs?' · '+eur(p.prijs):''}</li>`).join('');
 document.getElementById('zoek').oninput=e=>{st.zoek=e.target.value;teken()};teken()}).catch(e=>{console.error(e);document.getElementById('stand').textContent='De prijzen konden niet worden geladen. Probeer het later opnieuw.'});
 </script>
 </body>
