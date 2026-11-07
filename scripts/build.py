@@ -8,11 +8,14 @@ zodat de vorige versie van de pagina online blijft.
 import argparse
 import datetime as dt
 import json
+import os
 import pathlib
 import re
 import statistics
 import sys
 import urllib.request
+
+import acties
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 BRON_URL = "https://raw.githubusercontent.com/supermarkt/checkjebon/main/data/supermarkets.json"
@@ -26,7 +29,7 @@ MIN_RIJEN = 150        # minder resultaten: er is iets mis met de bron
 
 IN = re.compile(r"kwark|skyr|kvarg|quark|prote[iï]n.*(yogh|pudding)|(yogh|pudding).*prote[iï]n|griekse.*yogh|yogh.*griekse", re.I)
 UIT = re.compile(
-    r"taart|cake|hond|\bkat\b|snack|bonbon|\bijs|ijsje|\brepen?\b|\bbar\b|reep|saus|dressing|poeder|shake|"
+    r"taart|cake|hond|\bkat\b|snack|bonbon|\bijs\b|ijsje|ijsjes|\brepen?\b|\bbar\b|reep|saus|dressing|poeder|shake|"
     r"kids|baby|kind|toetie|toetjes?\b|danoontje|\bdip\b|spread|smeer|plantaardig|soja|alpro|haver|\boat|"
     r"granola|muesli|cruesli|\bmix\b|koek|knijp|shampoo|masker|crème|wafel|brood|pizza|\bvol(le)?\b|"
     r"smoothie|pakket|variatie|drink|drank|choco(?!la)|ontbijt|vitamine|kaas|tzatziki|kruiden|mayo|soep|hummus|"
@@ -183,6 +186,7 @@ def bouw(data, regels, historie, vandaag, brondatum):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--bron")
+    parser.add_argument("--acties", help="JSON-bestand met acties, voor testen")
     args = parser.parse_args()
     regels = json.loads((ROOT / "data/eiwit.json").read_text("utf8"))
     pad_historie = ROOT / "data/historie.json"
@@ -191,6 +195,20 @@ def main():
     uitvoer = bouw(laad_bron(args.bron), regels, historie, vandaag, bron_datum())
     if len(uitvoer["producten"]) < MIN_RIJEN:
         sys.exit(f"Te weinig producten ({len(uitvoer['producten'])}); pagina niet bijgewerkt.")
+    uitvoer["binnenkort"] = []
+    uitvoer["acties"] = {"ok": False}
+    key = os.environ.get("PRIJSPROFEET_KEY", "").strip()
+    try:
+        if args.acties:
+            ruw = json.loads(pathlib.Path(args.acties).read_text("utf8"))
+        elif key:
+            ruw = acties.haal_acties(key)
+        else:
+            raise RuntimeError("geen PRIJSPROFEET_KEY ingesteld")
+        acties.verrijk(uitvoer, ruw, regels, vind_regel, gram, (IN, UIT), vandaag)
+        print("Acties:", uitvoer["acties"])
+    except Exception as fout:  # zonder acties blijft de pagina gewoon werken
+        print("Acties niet opgehaald:", type(fout).__name__, str(fout)[:200], file=sys.stderr)
     (ROOT / "docs/data.json").write_text(json.dumps(uitvoer, ensure_ascii=False, separators=(",", ":")), "utf8")
     pad_historie.write_text(json.dumps(historie, ensure_ascii=False, separators=(",", ":"), sort_keys=True), "utf8")
     print(f"{len(uitvoer['producten'])} producten, {len(uitvoer['onbekend'])} nog zonder waarde")
