@@ -3,21 +3,44 @@ on:
   schedule:
     - cron: "17 7 * * *"   # dagelijks, na de update van de brondata
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "docs/index.html"
+      - "data/eiwit.json"
+      - "scripts/**"
 permissions:
   contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: proteindex
+  cancel-in-progress: false
 jobs:
   update:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: python scripts/build.py
-      - name: Resultaat opslaan
+        env:
+          PRIJSPROFEET_KEY: ${{ secrets.PRIJSPROFEET_KEY }}
+      - name: Prijsgeschiedenis opslaan (alleen Checkjebon-data)
         run: |
           git config user.name "proteindex-bot"
           git config user.email "proteindex-bot@users.noreply.github.com"
-          git add docs/data.json data/historie.json
+          git rm --cached --ignore-unmatch --quiet docs/data.json
+          git add data/historie.json
           git diff --cached --quiet || git commit -m "Prijzen $(date +%F)"
           git push
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+          retention-days: 1
+      - id: deployment
+        uses: actions/deploy-pages@v4
